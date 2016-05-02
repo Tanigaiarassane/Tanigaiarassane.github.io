@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
         <meta charset="utf-8" />
-        <title>tanigai's corner - Tanigaiarassane</title>
+        <title>Tanigai's corner - Tanigaiarassane</title>
         <link rel="stylesheet" href="/theme/css/main.css" />
 
         <!--[if IE]>
@@ -12,15 +12,452 @@
 
 <body id="index" class="home">
         <header id="banner" class="body">
-                <h1><a href="/">tanigai's corner </a></h1>
+                <h1><a href="/">Tanigai's corner </a></h1>
                 <nav><ul>
-                    <li><a href="/category/test.html">Test</a></li>
+                    <li><a href="/category/about.html">About</a></li>
+                    <li><a href="/category/data-science.html">Data Science</a></li>
                 </ul></nav>
         </header><!-- /#banner -->
 
             <aside id="featured" class="body">
                 <article>
-                    <h1 class="entry-title"><a href="/first_post.html">first_post</a></h1>
+                    <h1 class="entry-title"><a href="/introduction-to-pyspark.html">Introduction to Pyspark</a></h1>
+<footer class="post-info">
+        <abbr class="published" title="2016-05-02T06:05:00+05:30">
+                Published: Mon 02 May 2016
+        </abbr>
+
+        <address class="vcard author">
+                By                         <a class="url fn" href="/author/tanigaiarassane.html">Tanigaiarassane</a>
+        </address>
+<p>In <a href="/category/data-science.html">Data Science</a>.</p>
+
+</footer><!-- /.post-info --><p><strong>Tanigai's reading corner</strong></p>
+<h1>Beginners guide to spark</h1>
+<h2>Introduction to Spark - Concept, Architecture and programming in pyspark</h2>
+<h3>What is spark?</h3>
+<p>Spark is a cluster computing platform designed to be fast and general purpose. It extends mapreduce framework to support interative and stream processing in addition to the batch processing capability. </p>
+<p>Some of the salient features of spark are </p>
+<ul>
+<li>
+<p>Its ability to run computations in-memory. </p>
+</li>
+<li>
+<p>It can perform different type of processing (batch, iterative,streaming) under the same engine</p>
+</li>
+</ul>
+<p>The motivation for this project was to come up with a iterative framework with the ability to share data between iterations. Hadoop was slow while scaling machine learning processing. </p>
+<p>It was developed at university of Berkeley by Matei, creator of spark in 2009. This was developed as part of his PhD evaluation. Currently he is the co-founder of Data Bricks that supports Spark.  2007- Dryad paperpublished by Microsoft. It is part of Apache Software foundation since 2013. </p>
+<p>Some of the advantage of Spark over Mapreduce (computing infra that comes with Hadoop) is that it stores the result in memory and is benchmarked to be 100 times faster while reading from memory and 30 times faster while reading from Disk, compared to hadoop.</p>
+<p>On-Disk record : Time to sort of 100TB of data(Source: http://sortbenchmark.org)</p>
+<ul>
+<li>2013 - Hadoop : 2100 machines and took 72 minutes </li>
+<li>2014 - Spark  : 207 machines and took 23 minutes</li>
+</ul>
+<h2>Components of Spark</h2>
+<p>Apache Spark is a unification of multiple projects aimed at different purposes</p>
+<p><img alt="MacDown logo" src="spark.png" /></p>
+<p>The core of spark processing is the <strong>Spark engine</strong> - This contains the basic functionalities of spark like task scheduling, memory management, fault recovery and interating with storage systems. It also intefaces with RDD - the basic datastructure for spark.</p>
+<p>Spark does <strong>cluster management</strong> using various management services. The cluster managers take care of scaling from one to several thousands worker nodes that enables parallelism. Spark supports various cluster managers including YARN from hadoop, Mesos and spark has its own standalone cluster manager.</p>
+<p>It supports <strong>storage</strong> using many third party systems including local file system, Hadoop's HDFS, Amazon's S3 and NoSQL DBs like Cassandra  and HBASE.</p>
+<p>Spark has integration with <strong>higher level tools</strong> for varied operationa. It offers  SQL like operations using Spaark SQL, Machine learning   algorithms using ML Lib, Graph operations using GrphaX.</p>
+<p>One of important salient feature of Spark is its ability to operate with many    <strong>programming languages</strong>. It supports API for Scala, Java, R and Pthon.</p>
+<p>Over 500 enterprise organizations are already using Spark for their Big data analytics.</p>
+<h3>Understanding spark:</h3>
+<p>To understand spark, we need to know the data storage (RDD,in-memory) and computations possible on the data.</p>
+<p>Spark operates on a <strong>Resilient Distributed data set</strong> - an in-memory object storage facitiy.</p>
+<p>Once the RDD is created, Spark performs computation on these RDD - the computations can lead to a new RDD or a value. The computations are called <strong>operations</strong></p>
+<p>Let's look deeper into these  </p>
+<h4>RDD: Resilient Distributed DataSet</h4>
+<ul>
+<li>
+<p>Respresentation of the data that comes into your system in the form of objects and allows computation of top of it.</p>
+</li>
+<li>
+<p>Spark’s primary abstraction is a distributed collection of items called a Resilient Distributed Dataset (RDD). </p>
+</li>
+<li>
+<p>RDDs can be created from Hadoop InputFormats (like HDFS files or HBase) or by transforming other RDDs.</p>
+</li>
+<li>
+<p>Can be partitiioned and distributed in multiple nodes.</p>
+</li>
+<li>
+<p>RDD are immutables.</p>
+</li>
+<li>
+<p>Can be  cached and persisted</p>
+</li>
+</ul>
+<p>Spark creates partitions of the RDD and perform operation on them. Partitions are stored in different nodes.</p>
+<h4>Operations on RDD:</h4>
+<p>There are two types of operations possible on RDD - </p>
+<ol>
+<li>Transform and </li>
+<li>Action.</li>
+</ol>
+<p><strong>Transformations</strong> is a  type of operation that are done on an RDD. The result of a transform results in a  another RDD.</p>
+<p><strong>Actions</strong>  act on a RDD and produce result.
+- Lazy computation:</p>
+<ul>
+<li>Spark does not initiate a computation on Transformations, it does only on encountering an action. This is called lazy computation and it helps in optimizing the actions that is required before the actual computation.</li>
+</ul>
+<h2>Why spark?</h2>
+<p>Spark projoect was first introduced as part of Hadoop 2.0 (though Spark can use other Management frameworks too). The primary motivation for Spark project is to isolate the management and computation infrastructure. In Hadoop 1.0, MapReduce was performing both the computation and resource management functionality. </p>
+<p>Fault recovery - lineage 
+Optimized - Acyclic grap
+Easy programming - Transform, action
+Rich librarynsupport</p>
+<h2>Installing spark</h2>
+<p>Spark used Hadoop, Mesos, Spark scheduler as Resource Managemement partners. Let us use Hadoop 2.0 (YARN) in our case for supporting Management activities for  spark.</p>
+<h2>Programming in Spark through pyspark</h2>
+<p>Let us try to read file from HDFS and print the lines using spark</p>
+<p>Reading from HDFS:</p>
+<div class="highlight"><pre><span></span>pyspark
+</pre></div>
+
+
+<p>distFile = sc.textFile("hdfs://localhost:54310/data/derby1.log")</p>
+<p>Number of lines in the file:</p>
+<div class="highlight"><pre><span></span>distFile.count()
+</pre></div>
+
+
+<p>reading first line:  </p>
+<div class="highlight"><pre><span></span>distFile.first
+</pre></div>
+
+
+<h2>Functional programming in Python</h2>
+<p>Let us refersh some of the functional concepts in python.</p>
+<h3>Map and reduce</h3>
+<ul>
+<li>
+<p>Map, reduce and Filter in python worlds:</p>
+<ul>
+<li>
+<p>Map - Apply a function on each element of a list and return a list. This can be accomplished using for loop usually,  </p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; a=[(1,2),(5,6),(7,8)]
+&gt;&gt;&gt; map(lambda t:t[1],a)
+[2, 6, 8]
+
+&gt;&gt;&gt; b = [1,2,3,4]
+&gt;&gt;&gt; map(lambda : a*2,b)
+[2, 4, 6, 8]
+</pre></div>
+
+
+</li>
+<li>
+<p>Reduce: Applies a function to all pairs of elements of a list and return a single value</p>
+<div class="highlight"><pre><span></span>&gt;&gt; a = [1,2,3,4]
+&gt;&gt; def add (x,y):
+        return x+y
+&gt;&gt;&gt; reduce(lambda add,a)
+16
+</pre></div>
+
+
+<p>add(1,add(2,add(3,4)))</p>
+</li>
+<li>
+<p>Filter: selects only a certain element from the list</p>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; def isOdd(a):
+...    return a%2
+&gt;&gt;&gt; filter(isOdd, [1,2,3,4,5])
+[1, 3, 5]
+</pre></div>
+
+
+</li>
+<li>
+<p>Flatmap: We end up with list of list and we want a flat list.</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="n">chain</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">],[</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">,</span><span class="mi">7</span><span class="p">])</span>
+</pre></div>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<p>Pyspark</p>
+<blockquote>
+<blockquote>
+<blockquote>
+<p>sc</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span>&lt;pyspark.context.SparkContext object at     0x7f9145af5450&gt;
+</pre></div>
+
+
+<blockquote>
+<blockquote>
+<blockquote>
+<p>sqlCtx</p>
+</blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span>&lt;pyspark.sql.context.HiveContext object at  0x7f9145360f90&gt;
+</pre></div>
+
+
+<blockquote>
+<blockquote>
+<blockquote></blockquote>
+</blockquote>
+</blockquote>
+<div class="highlight"><pre><span></span>list1 = sc.parallelize(range(1,1000)).map(lambda x: x*10)
+list1.reduce(lambda x,y: x+y)
+list1.filter(lambda x: x%100 == 0).collect()
+</pre></div>
+
+
+<p>Transformations Vs Actions:</p>
+<ul>
+<li>
+<p>Transformation:</p>
+<ul>
+<li>Returns another RDD</li>
+<li>Is part of lazy evaluations. (not performend until an action is called)</li>
+</ul>
+</li>
+<li>
+<p>Actions</p>
+<ul>
+<li>Returns a value other than an RDD</li>
+<li>Are performed immediately.</li>
+</ul>
+</li>
+</ul>
+<h4>RDD methods:</h4>
+<p>Transformations
+    - map(f)
+    - filter(f)
+    - flatmap</p>
+<p>Actions:
+   - reduce(f)
+   - take(n)
+   - collect()
+   - sum()
+   - man, min,mean</p>
+<p>Example: Indentify what this piple does?</p>
+<p>sc.parallelize(range(1,10)).filter(lambda x: x%3==0).reduce(lambda a,b:a*b)</p>
+<h3>Reading files:</h3>
+<div class="highlight"><pre><span></span>&gt;&gt;&gt; sc.textFile(&#39;hdfs://localhost:54310/data/one.txt&#39;).map(lambda line: line.split(&#39;,&#39;)).collect()
+
+[[u&#39;one&#39;], [u&#39;two&#39;], [u&#39;three&#39;], [u&#39;four&#39;], [u&#39;five&#39;], [u&#39;six&#39;], [u&#39;seven&#39;], [u&#39;eight&#39;], [u&#39;nine&#39;], [u&#39;ten&#39;], [u&#39;&#39;], [u&#39;&#39;]]
+</pre></div>
+
+
+<p>Reads a files and splits the lines using map function.</p>
+<h3>Tuples and ReduceBYkey</h3>
+<ul>
+<li>Many times we want to group elements and then calculate value for each group.</li>
+<li>In spark, we operate on tuple (key,value) pair and we normally use reduceByKey to perform a reduce on the elements of each group.<div class="highlight"><pre><span></span> &gt;&gt;&gt; people = sc.textFile(&#39;hdfs://localhost:54310/data/people/txt&#39;).map(lambda line:line.split(&#39;,&#39;))
+
+&gt;&gt;&gt; people.map(lambda x: (x[1],1)).reduceByKey(lambda x,y:x+y).collect()
+[(u&#39;M&#39;, 4), (u&#39;F&#39;, 1)]
+</pre></div>
+
+
+</li>
+</ul>
+<h3>Mapping through object</h3>
+<p>Usually the data set correponda to a feature/person that can be represented by an object.
+we can pass class to map function as argument and process the lines fom files.</p>
+<p>This can be accomplished using the following methods</p>
+<ol>
+<li>Creation of class - make python classes that resemble that object.</li>
+<li>Pass that python files to pyspart as an argument using <strong>--py-files</strong> parameter</li>
+<li>
+<p>Use the class funcation in map for mapping the lines from the file. </p>
+</li>
+<li>
+<p>Creation of calss file:</p>
+</li>
+</ol>
+<p>root@tanigai1:~/spark/bin# cat /root/python/person.py </p>
+<div class="highlight"><pre><span></span><span class="k">class</span> <span class="n">Person:</span>
+ <span class="n">def</span> <span class="n">parse</span>(<span class="k">self</span>,<span class="n">line</span>):
+   <span class="n">fields</span>=<span class="n">line</span>.<span class="nb">split</span>(<span class="s">&#39;,&#39;</span>)
+   <span class="k">self</span>.<span class="nb">name</span>=<span class="n">fields</span>[<span class="mi">0</span>]
+   <span class="k">self</span>.<span class="n">gender</span>=<span class="n">fields</span>[<span class="mi">1</span>]
+   <span class="k">self</span>.<span class="n">age</span>=<span class="nb">int</span>(<span class="n">fields</span>[<span class="mi">2</span>])
+   <span class="k">self</span>.<span class="n">favourite_language</span>=<span class="n">fields</span>[<span class="mi">3</span>]
+   <span class="k">return</span> <span class="k">self</span>
+<span class="n">def</span> <span class="n">__repr__</span>(<span class="k">self</span>):
+   <span class="k">return</span> <span class="s">&quot;Person data&quot;</span>
+</pre></div>
+
+
+<p>2.. Passing the python file to pyspark</p>
+<div class="highlight"><pre><span></span>./pyspark --py-files /root/python/person.py
+</pre></div>
+
+
+<ol>
+<li>Using the function for the class for mapping the lines<div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">person</span>
+<span class="n">people</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="s2">&quot;hdfs://localhost:54310/data/people.txt&quot;</span><span class="p">)</span>
+<span class="n">people</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">line</span><span class="p">:</span><span class="n">person</span><span class="o">.</span><span class="n">Person</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">line</span><span class="p">))</span><span class="o">.</span><span class="n">first</span><span class="p">()</span>
+</pre></div>
+
+
+</li>
+</ol>
+<h3>Joins</h3>
+<ul>
+<li>Allows us to combine 2 RDDs<ul>
+<li>Each RDD is of the form <K,V></li>
+<li>Result is of the form <k,<v1,v2>&gt;</li>
+<li>Joins only on equal keys<div class="highlight"><pre><span></span>&gt;&gt;&gt; student = [(60429,&quot;Tanigai&quot;),
+(60543,&quot;Hemendara&quot;),
+(60534,&quot;Naraindra&quot;)
+]
+
+&gt;&gt;&gt; student_hobbies = [(60429,&quot;Cricket&quot;),
+            (60543,&quot;Footbal&quot;),
+            (60534,&quot;Footbal&quot;)
+            ]
+
+&gt;&gt;&gt; student_rdd = sc.parallelize(student)
+&gt;&gt;&gt; student_hobbies_rdd =sc.parallelize(student_hobbies)
+&gt;&gt;&gt; student_info_join = student_rdd.join(student_hobbies_rdd)
+
+&gt;&gt;&gt; student_info_join.collect()
+[(60534, (&#39;Naraindra&#39;, &#39;Footbal&#39;)), (60429,             (&#39;Tanigai&#39;, &#39;Cricket&#39;)), (60543,            (&#39;Hemendara&#39;, &#39;Footbal&#39;))]
+</pre></div>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<h3>Storing to files:</h3>
+<div class="highlight"><pre><span></span>    &gt;&gt;&gt; salesData.map(lambda line:line.split(&#39;\t&#39;)).map(lambda line: (line[1],int(line[3]))).reduceByKey(lambda x,y:x+y).saveAsTextFile(&quot;hdfs://localhost:54310/data/sales/sales_by_stores&quot;)
+</pre></div>
+
+
+<h2>Writing python application using pyspark:</h2>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span><span class="p">,</span> <span class="n">SparkConf</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">sales_schema</span>
+
+<span class="n">appName</span><span class="o">=</span><span class="s2">&quot;salesApp&quot;</span>
+<span class="n">master</span><span class="o">=</span><span class="s2">&quot;local&quot;</span>
+<span class="n">conf</span> <span class="o">=</span> <span class="n">SparkConf</span><span class="p">()</span><span class="o">.</span><span class="n">setAppName</span><span class="p">(</span><span class="n">appName</span><span class="p">)</span>
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">(</span><span class="n">conf</span><span class="o">=</span><span class="n">conf</span><span class="p">)</span>
+
+<span class="n">base_path</span><span class="o">=</span><span class="s2">&quot;../../data/sales/&quot;</span>
+<span class="n">output_path</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="c1">#load stores,products,sales</span>
+<span class="n">stores</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="n">base_pat</span><span class="o">+</span><span class="s2">&quot;stores*.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">sales_schema</span><span class="o">.</span><span class="n">Store</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+<span class="n">products</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="n">base_path</span><span class="o">+</span><span class="s2">&quot;products.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">sales_schema</span><span class="o">.</span><span class="n">Product</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="p">))</span> <span class="c1"># id | name | category</span>
+
+<span class="n">sales</span><span class="o">=</span><span class="n">sc</span><span class="o">.</span><span class="n">textFile</span><span class="p">(</span><span class="n">base_path</span><span class="o">+</span><span class="s2">&quot;sales_*.txt&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span><span class="n">sales_schema</span><span class="o">.</span><span class="n">SaleRow</span><span class="p">()</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
+
+<span class="c1"># calculate and store sales by day</span>
+<span class="n">sales_by_day</span><span class="o">=</span><span class="n">sales</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">day</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">quantity</span><span class="p">))</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+<span class="c1">#save sales by day</span>
+<span class="n">sales_by_day</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="s2">&quot;{0}</span><span class="se">\t</span><span class="s2">{1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">saveAsTextFile</span><span class="p">(</span><span class="n">output_path</span><span class="o">+</span><span class="s2">&quot;sales_by_day&quot;</span><span class="p">)</span>
+
+<span class="c1">#calculate sales by store</span>
+<span class="n">sales_by_store</span><span class="o">=</span><span class="n">sales</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span> <span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">store_id</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">quantity</span><span class="p">)</span> <span class="p">)</span><span class="o">.</span><span class="n">reduceByKey</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">:</span><span class="n">x</span><span class="o">+</span><span class="n">y</span><span class="p">)</span>
+
+<span class="c1">#now join with stores to get store names</span>
+<span class="n">sales_by_store_joined</span><span class="o">=</span><span class="n">sales_by_store</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">stores</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">id</span><span class="p">,</span><span class="n">x</span><span class="o">.</span><span class="n">name</span><span class="p">)))</span> <span class="c1"># output is: store_id | &lt;qty | store&gt;</span>
+
+<span class="c1">#reshape</span>
+<span class="n">sales_by_store_with_name</span><span class="o">=</span><span class="n">sales_by_store_joined</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+
+<span class="c1"># and save</span>
+<span class="n">sales_by_store_with_name</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">l</span><span class="p">:</span> <span class="s2">&quot;{0}</span><span class="se">\t</span><span class="s2">{1}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">l</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">saveAsTextFile</span><span class="p">(</span><span class="n">output_path</span><span class="o">+</span><span class="s2">&quot;sales_by_store&quot;</span><span class="p">)</span>
+</pre></div>
+
+
+<h3>Other functions in spark</h3>
+<h2>Data tables</h2>
+<ul>
+<li>It is like RDD but with schema information<ul>
+<li>Generic objects, know their fields</li>
+<li>Datatable know all its colums</li>
+<li>All rows are the same kind <div class="highlight"><pre><span></span><span class="c1"># data tables have explicit schemas, and a potentially better query optimizer</span>
+<span class="kn">from</span> <span class="nn">pyspark</span> <span class="kn">import</span> <span class="n">SparkContext</span><span class="p">,</span> <span class="n">SparkConf</span>
+<span class="kn">from</span> <span class="nn">pyspark.sql</span> <span class="kn">import</span> <span class="n">SQLContext</span>
+
+<span class="n">sc</span> <span class="o">=</span> <span class="n">SparkContext</span><span class="p">()</span>
+<span class="n">sqlCtx</span> <span class="o">=</span> <span class="n">SQLContext</span><span class="p">(</span><span class="n">sc</span><span class="p">)</span>
+
+<span class="c1"># you can read from json files (one object in each line, need quotes around field names)</span>
+<span class="c1"># you get a datatable which is a kind of RDD, with schema info, and each tuple is of class Row</span>
+<span class="n">people</span><span class="o">=</span><span class="n">sqlCtx</span><span class="o">.</span><span class="n">jsonFile</span><span class="p">(</span><span class="s2">&quot;../../data/people1.json&quot;</span><span class="p">)</span>
+
+<span class="c1"># the show method is similar to collect, but displays nicely</span>
+<span class="n">people</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># the select method is almost-equivalent to map</span>
+<span class="c1"># can use strings, or columns from datatable in expressions</span>
+<span class="n">people</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="s2">&quot;name&quot;</span><span class="p">,</span><span class="n">people</span><span class="o">.</span><span class="n">age</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="c1"># can use filter (same as in rdd)</span>
+<span class="n">people</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">people</span><span class="o">.</span><span class="n">age</span><span class="o">&gt;</span><span class="mi">30</span><span class="p">)</span>
+
+<span class="c1"># can use [] instead of filter, like in pandas</span>
+<span class="n">people</span><span class="p">[</span><span class="n">people</span><span class="o">.</span><span class="n">gender</span><span class="o">==</span><span class="s1">&#39;F&#39;</span><span class="p">]</span>
+
+<span class="c1"># can use groupBy, and then count() or a few other operators</span>
+<span class="n">people</span><span class="o">.</span><span class="n">groupBy</span><span class="p">(</span><span class="n">people</span><span class="o">.</span><span class="n">gender</span><span class="p">)</span><span class="o">.</span><span class="n">count</span><span class="p">()</span>
+
+<span class="c1"># can use sql !</span>
+
+<span class="c1">#first register as temp table</span>
+<span class="n">people</span><span class="o">.</span><span class="n">registerTempTable</span><span class="p">(</span><span class="s2">&quot;people&quot;</span><span class="p">)</span>
+
+<span class="n">sqlCtx</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select name, age FROM people&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">sqlCtx</span><span class="o">.</span><span class="n">sql</span><span class="p">(</span><span class="s2">&quot;select gender,avg(age) AS AvgAge FROM people GROUP BY gender&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+
+
+</li>
+</ul>
+</li>
+</ul>
+<h2>Reference links:</h2>
+<ol>
+<li>
+<p>http://spark.apache.org/docs/latest/programming-guide.html</p>
+</li>
+<li>
+<p>https://gist.github.com/MLnick/6ec916b646c3004d7523</p>
+</li>
+<li>
+<p>https://databricks.com/blog/2015/06/02/statistical-and-mathematical-functions-with-dataframes-in-spark.html</p>
+</li>
+<li>https://www.youtube.com/watch?v=bJouNc1REno</li>
+<li>http://spark.apache.org/docs/latest/sql-programming-guide.html</li>
+<li>https://www.youtube.com/watch?v=KzFe4T0PwQ8</li>
+<li>History of Spark: http://blog.madhukaraphatak.com/history-of-spark/</li>
+<li>Matei spark thesis - http://www.eecs.berkeley.edu/Pubs/TechRpts/2014/EECS-2014-12.pdf</li>
+<li>https://www.youtube.com/watch?v=GxQkGo0VdJ8&amp;list=PLIxzgeMkSrQ9CzshSkA16tizyDlhtxthB&amp;index=6</li>
+<li>Spark architecture: https://jaceklaskowski.gitbooks.io/mastering-apache-spark/content/spark-driver.html</li>
+</ol>                </article>
+            </aside><!-- /#featured -->
+                <section id="content" class="body">
+                    <h1>Other articles</h1>
+                    <hr />
+                    <ol id="posts-list" class="hfeed">
+
+            <li><article class="hentry">
+                <header>
+                    <h1><a href="/about-me.html" rel="bookmark"
+                           title="Permalink to About me">About me</a></h1>
+                </header>
+
+                <div class="entry-content">
 <footer class="post-info">
         <abbr class="published" title="2014-12-13T18:32:00+05:30">
                 Published: Sat 13 December 2014
@@ -29,10 +466,14 @@
         <address class="vcard author">
                 By                         <a class="url fn" href="/author/tanigaiarassane.html">Tanigaiarassane</a>
         </address>
-<p>In <a href="/category/test.html">Test</a>.</p>
+<p>In <a href="/category/about.html">About</a>.</p>
 
-</footer><!-- /.post-info --><p>Hello world from Pelican!</p>                </article>
-            </aside><!-- /#featured -->
+</footer><!-- /.post-info -->                <p>Tanigaiarassane is a Senior Management professional with 17+ years of experience in leading Development, Test and Automation groups.</p>
+                <a class="readmore" href="/about-me.html">read more</a>
+                </div><!-- /.entry-content -->
+            </article></li>
+                </ol><!-- /#posts-list -->
+                </section><!-- /#content -->
         <section id="extras" class="body">
                 <div class="blogroll">
                         <h2>blogroll</h2>

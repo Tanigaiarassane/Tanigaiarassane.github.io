@@ -7,6 +7,8 @@ import pdb
 '''
 https://yuji.wordpress.com/2011/06/22/python-imaplib-imap-example-with-gmail/
 http://stackoverflow.com/questions/32193953/imap-error-when-accessing-gmail-from-command-line
+__author__ :Tanigaiarassane
+__Date__ : 15 Jul 2016
 '''
 IMAP_SERVER = "imap.gmail.com"
 EMAIL_ACCOUNT = "tanigai.dj@gmail.com"
